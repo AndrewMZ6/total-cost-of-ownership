@@ -120,3 +120,8 @@ class OranSite:
 
 	def __init__(self, RU):
 		self.RU = RU
+		self.N_ru = 3
+		self.Coem_percent = config.OEM_PERCENT
+		self.cw_percent = config.COMISSION_WORK_PERCENT
+		self.mast_cost = config.SITE_MAST_INSTALL
+		self.rent_per_year = config.SITE_RENT_PER_YEAR
