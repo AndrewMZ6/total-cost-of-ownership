@@ -125,3 +125,7 @@ class OranSite:
 		self.cw_percent = config.COMISSION_WORK_PERCENT
 		self.mast_cost = config.SITE_MAST_INSTALL
 		self.rent_per_year = config.SITE_RENT_PER_YEAR
+
+	@property
+	def equipment_cost(self):
+		return self.N_ru*self.RU.cost + self.mast_cost
