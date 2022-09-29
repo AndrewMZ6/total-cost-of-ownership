@@ -129,3 +129,15 @@ class OranSite:
 	@property
 	def equipment_cost(self):
 		return self.N_ru*self.RU.cost + self.mast_cost
+
+	@property
+	def comission_works(self):
+		return self.cw_percent*self.N_ru*self.RU.cost
+
+	@property
+	def coem(self):
+		return self.Coem_percent*(self.equipment_cost - self.mast_cost)
+
+	@property
+	def software_cost(self):
+		return self.N_ru*self.RU.software_cost
