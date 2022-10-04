@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from math import ceil
 from classes import ( RU, DU, CU,
 					  DranSite, DranOptic,
-					  FiveGCore )
+					  FiveGCore, OranSite, OranDpc )
 
 
 N_site 	= config.BASE_STATION_AMOUNT
@@ -48,7 +48,7 @@ TCO_scenario_1_dran = utils.TCO(CAPEX_scenario_1_dran,
 # ----------- Open RAN
 
 oran_site = OranSite()
-oran_dpc  = OranDpc()
+oran_dpc  = OranDpc(N_site)
 
 N_dpc = ceil(N_site/19)
 
