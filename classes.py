@@ -4,10 +4,10 @@ from math import ceil
 
 class DranSite:
 
-	def __init__(self, RU, DU, CU):
-		self.RU 			= RU
-		self.DU 			= DU
-		self.CU 			= CU
+	def __init__(self):
+		self.RU 			= RU()
+		self.DU 			= DU()
+		self.CU 			= CU()
 		self.N_ru 			= 3
 		self.coem_percent 	= config.OEM_PERCENT
 		self.cw_percent 	= config.COMISSION_WORK_PERCENT
@@ -56,6 +56,12 @@ class DranSite:
 class RU:
 	cost = config.DRAN_RU_BUY_COST
 	power_per_year = config.DRAN_RU_POWER_CONSUMPTION*config.HOURS_PER_YEAR
+
+class oranRU:
+	cost            =   config.ORAN_RU_BUY_COST;
+	software_cost   =   config.ORAN_RU_SOFTWARE_BUY_COST;
+
+	power_per_year  =   config.ORAN_RU_POWER_CONSUMPTION*config.HOURS_PER_YEAR;
 
 class DU:
 	cost = config.DRAN_DU_BUY_COST
@@ -120,7 +126,7 @@ class DranOptic:
 class OranSite:
 
 	def __init__(self):
-		self.RU = RU()
+		self.RU = oranRU()
 		self.N_ru = 3
 		self.Coem_percent = config.OEM_PERCENT
 		self.cw_percent = config.COMISSION_WORK_PERCENT
@@ -142,6 +148,15 @@ class OranSite:
 	@property
 	def software_cost(self):
 		return self.N_ru*self.RU.software_cost
+
+	@property
+	def power_per_year(self):
+		usage_coeff = 0.6
+		return usage_coeff*(self.N_ru*self.RU.power_per_year)
+
+	@property
+	def software_update_per_year(self):
+		return config.SOFTWARE_UPDATE_PERCENT*(self.N_ru*self.RU.software_cost)
 
 
 class OranDpc:
@@ -177,15 +192,58 @@ class OranDpc:
 		N_virt_du_per_virt_cu = 2
 		N_virt_cu = ceil(self.N_site/N_virt_du_per_virt_cu)
 
-		return ceil(N_virt_cu/self.N_virt_cu_per_phy_cu_server_)
+		return ceil(N_virt_cu/self.N_virt_cu_per_phy_cu_server)
 
 	@property
 	def N_servers(self):
-		return self.N_
+		return self.N_du_servers + self.N_cu_servers
 
 	@property
 	def building_cost(self):
-		return self.C_tier_rack*(ceil(self.N_se))
+		return self.C_tier_rack*(ceil(self.N_servers))
+
+	@property
+	def coem(self):
+		return self.coem_percent*self.equipment_cost
+
+	@property
+	def equipment_cost(self):
+		return self.total_DU_cost + self.total_CU_cost + self.cooling
+
+	@property
+	def total_DU_cost(self):
+		N_virtual_du = self.N_site
+		return N_virtual_du*(self.single_du_cost + self.Ethernet_cost)
+
+	@property
+	def total_CU_cost(self):
+		N_virtual_cu = ceil(self.N_site/2)
+		return N_virtual_cu*self.single_cu_cost
+
+	@property
+	def software_cost(self):
+		C_du_software = config.ORAN_DU_SOFTWARE_BUY_COST
+		C_cu_software = config.ORAN_CU_SOFTWARE_BUY_COST
+		return C_du_software*self.N_site + C_cu_software*ceil(self.N_site/2)
+
+	@property
+	def comission_works(self):
+		return self.cw_percent*(self.total_DU_cost/self.N_virt_du_per_phy_du_server + 
+								self.total_CU_cost/self.N_virt_cu_per_phy_cu_server)
+
+	@property
+	def power_per_year(self):
+		power_du_per_year = config.ORAN_VIRTUAL_DU_POWER_CONSUMPTION*config.HOURS_PER_YEAR;
+		power_cu_per_year = config.ORAN_VIRTUAL_CU_POWER_CONSUMPTION*config.HOURS_PER_YEAR;
+		power_cooling_per_year = config.ORAN_COOLING_POWER_CONSUMPTION*config.HOURS_PER_YEAR;
+
+		return 0.6*(power_du_per_year*(self.N_site) + 
+                             power_cu_per_year*(ceil(self.N_site/2)) + 
+                             power_cooling_per_year)
+
+	@property
+	def software_update_per_year(self):
+		return self.software_cost*config.SOFTWARE_UPDATE_PERCENT
 
 
 class OranOptic(DranOptic):

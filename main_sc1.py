@@ -2,17 +2,17 @@ import config
 import utils
 from matplotlib import pyplot as plt
 from math import ceil
-from classes import ( RU, DU, CU,
-					  DranSite, DranOptic,
-					  FiveGCore, OranSite, OranDpc )
+from classes import (DranSite, DranOptic,
+					  FiveGCore, 
+					  OranSite, OranDpc, OranOptic)
 
 
 N_site 	= config.BASE_STATION_AMOUNT
 N_years = config.YEARS_PASSED
 c_wh 	= config.WATT_HOUR_COST
 
-dran_site = DranSite(RU, DU, CU)   # Зачем передавать классы (даже не экземпляры!) здесь, если можно их 
-								   # сразу использовать в классе DranSite
+dran_site = DranSite()   # Зачем передавать классы (даже не экземпляры!) здесь, если можно их 
+								   # сразу использовать в классе DranSite  (DONE)
 core = FiveGCore()
 
 
@@ -44,6 +44,7 @@ OPEX_scenario_1_dran = N_site*(c_wh*(dran_site.power_per_year) +
 
 TCO_scenario_1_dran = utils.TCO(CAPEX_scenario_1_dran, 
 								OPEX_scenario_1_dran, 8)
+
 
 # ----------- Open RAN
 
