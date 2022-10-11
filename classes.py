@@ -184,6 +184,14 @@ class OranDpc:
 		self.rent_per_year 	= config.SITE_RENT_PER_YEAR
 
 	@property
+	def building_cost(self):
+		return self.C_tier_rack*(ceil(self.N_servers/self.N_servers_per_rack))
+
+	@property
+	def equipment_cost(self):
+		return self.total_DU_cost + self.total_CU_cost + self.cooling
+
+	@property
 	def N_du_servers(self):
 		return ceil(self.N_site/self.N_virt_du_per_phy_du_server)
 
@@ -199,16 +207,8 @@ class OranDpc:
 		return self.N_du_servers + self.N_cu_servers
 
 	@property
-	def building_cost(self):
-		return self.C_tier_rack*(ceil(self.N_servers))
-
-	@property
 	def coem(self):
 		return self.coem_percent*self.equipment_cost
-
-	@property
-	def equipment_cost(self):
-		return self.total_DU_cost + self.total_CU_cost + self.cooling
 
 	@property
 	def total_DU_cost(self):
@@ -254,3 +254,9 @@ class OranOptic(DranOptic):
 				self.total_backhaul_length)*self.C_dig_per_km + \
 				(3*self.total_fronthaul_length + 
 				self.total_backhaul_length)*self.C_rol_per_km
+
+	@property
+	def maintenance_per_year(self):
+		return (3*self.total_fronthaul_length +
+				self.total_backhaul_length)*\
+				self.maintenance_per_year_per_km

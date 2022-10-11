@@ -87,6 +87,12 @@ TCO_scenario_1_oran = utils.TCO(CAPEX_scenario_1_oran,
 								OPEX_scenario_1_oran, 8)
 
 
+print(CAPEX_scenario_1_dran, OPEX_scenario_1_dran)
+print(CAPEX_scenario_1_oran, OPEX_scenario_1_oran)
+
+print(TCO_scenario_1_dran.total_cost)
+print(TCO_scenario_1_oran.total_cost)
+
 plt.plot(TCO_scenario_1_dran.total_cost, label = 'D-RAN', linestyle = '-.', linewidth = 1.5)
 plt.plot(TCO_scenario_1_oran.total_cost, label = 'Open RAN', linestyle = '--', linewidth = 1.5)
 plt.title('Total cost of ownership')
